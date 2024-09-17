@@ -1,5 +1,6 @@
+import { Client } from 'react-native-appwrite';
+import { Account, ID, Avatars, Databases } from 'react-native-appwrite';
 
-import { Client, Account, Databases, ID, Avatars } from 'appwrite';
 const config = {
     endpoint:"https://cloud.appwrite.io/v1",
     platform:"com.mindsinmotion.safeher",
@@ -28,24 +29,26 @@ const appwriteConfig = {
 };
 
 // Function to register a new user
-export async function createUser(email, password, username, mobileNumber) {
+
+export async function createUser(email, password, username, phone) {
     try {
         // Create the account
         const newAccount = await account.create(
             ID.unique(), // Create a unique ID for the account
             email,
             password,
-            username
+            username,
+            phone
         );
-  
+
         if (!newAccount) throw new Error("Failed to create a new account.");
-  
+
         // Generate the avatar URL from the username
         const avatarUrl = avatars.getInitials(username);
-  
+
         // Sign in the user after account creation
         await signIn(email, password); // Assuming `signIn` is another function that handles user login
-  
+
         // Store user information in the database, including mobile number
         const newUser = await databases.createDocument(
             appwriteConfig.databaseId,
@@ -56,22 +59,37 @@ export async function createUser(email, password, username, mobileNumber) {
                 email: email,
                 username: username,
                 avatar: avatarUrl.href,  // Storing the correct avatar URL
-                mobileNumber: mobileNumber, // Adding mobile number to the user document
+                phone: phone, // Correctly adding phone number to the user document
             }
         );
-  
+
         return newUser; // Return the new user document created
     } catch (error) {
         throw new Error(error.message || "An error occurred while creating the user.");
     }
 }
 
+
 // SignIn function (this should already exist in your code)
 export async function signIn(email, password) {
     try {
-        const session = await account.createEmailPasswordSession(email, password);
-        return session;
+      const session = await account.createEmailPasswordSession(email, password);
+      return session;
     } catch (error) {
-        throw new Error(error.message || "Failed to sign in.");
+      throw new Error(error.message || "Failed to sign in.");
     }
-}
+  }
+
+
+
+  export async function logout() {
+      try {
+          await account.deleteSession('current'); // Logs out the current session
+          console.log("User logged out successfully.");
+          return true;
+      } catch (error) {
+          console.error("Logout failed: ", error.message);
+          return false;
+      }
+  }
+  
