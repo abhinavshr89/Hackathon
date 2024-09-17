@@ -1,9 +1,9 @@
-import { View, Image } from 'react-native';
+import { View, Image, Text } from 'react-native';
 import React from 'react';
 import { Tabs } from 'expo-router'; // Removed Redirece as it wasn't used in the code
 import { icons } from "../../constants"; // Ensure that the icons object is correctly imported
-import { Text } from 'react-native';
 import { router } from 'expo-router';
+import UserContextProvider from '../context/provider';
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
     <View className="flex items-center justify-center gap-2">
@@ -24,11 +24,13 @@ const TabIcon = ({ icon, color, name, focused }) => {
 };
 
 const TabsLayout = () => {
+
   return (
     <>
+    <UserContextProvider>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: "#FFA001",
+          tabBarActiveTintColor: "#87CEEB", // Set active color to sky blue
           tabBarInactiveTintColor: "#CDCDE0",
           tabBarShowLabel: false,
           tabBarStyle: {
@@ -38,11 +40,9 @@ const TabsLayout = () => {
             height: 84,
           },
         }}
-
       >
         <Tabs.Screen
           name="home"
-
           options={{
             title: "Home",
             headerShown: false,
@@ -58,7 +58,6 @@ const TabsLayout = () => {
         />
         <Tabs.Screen
           name="bookMark"
-
           options={{
             title: "BookMark",
             headerShown: false,
@@ -72,10 +71,8 @@ const TabsLayout = () => {
             ),
           }}
         />
-
         <Tabs.Screen
           name="create"
-
           options={{
             title: "Create",
             headerShown: false,
@@ -89,10 +86,8 @@ const TabsLayout = () => {
             ),
           }}
         />
-
         <Tabs.Screen
           name="profile"
-
           options={{
             title: "Profile",
             headerShown: false,
@@ -107,6 +102,7 @@ const TabsLayout = () => {
           }}
         />
       </Tabs>
+      </UserContextProvider>
     </>
   );
 };

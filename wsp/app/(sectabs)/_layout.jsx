@@ -6,23 +6,19 @@ import UserContextProvider from '../context/provider';
 const AuthLayout = () => {
   return (
     <>
-    <UserContextProvider>
+    
       <Stack>
         <Stack.Screen
-          name="sign-in"
+          name="add-contacts"
           options={{
             headerShown: false,
           }}
         />
-        <Stack.Screen
-          name="sign-up"
-          options={{
-            headerShown: false,
-          }}
-        />
+        
       </Stack>
       <StatusBar backgroundColor="#161622" style="light" />
-    </UserContextProvider>
+
+   
     </>
   )
 }

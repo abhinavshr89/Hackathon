@@ -7,12 +7,16 @@ import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
 import { Link, useRouter } from "expo-router";
 import { signIn } from '../../appwrite/appwrite'; // Import the signIn function
+import { checkSession } from '../../appwrite/appwrite';
 
 const SignIn = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+  useState(()=>{
+    checkSession();
+  },[])
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter(); // Initialize the router for navigation
@@ -20,11 +24,11 @@ const SignIn = () => {
   const submit = async () => {
     setIsSubmitting(true);
     try {
-      // Call the signIn function
+      
       const user = await signIn(form.email, form.password);
       console.log("User signed in:", user);
 
-      // Navigate to the home screen or any other screen
+     
       router.push('/home');
     } catch (error) {
       console.error("Sign in failed: ", error.message);
